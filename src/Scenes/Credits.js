@@ -4,16 +4,25 @@ class Credits extends Phaser.Scene {
     }
 
     preload() {
+        // arrows 
+        this.load.image("right_arrow", "./assets/right_arrow.png");
 
+        // background
+        this.load.image("snowForest", "./assets/snowForest.png");
     }
 
     create() {
+        // create the tile backgrounds
+        this.snowForest = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'snowForest').setOrigin(0, 0);
+
+        // arrows
+        this.rightArrow = this.add.image((game.config.width * 15) / 16, (game.config.height * 7) / 8, 'right_arrow').setScale(2);
+
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',
-            fontSize: '28px',
-            backgroundColor: '#A020F0',
-            color: '#FFFFFF',
+            fontSize: '32px',
+            color: 'black',
             align: 'right',
             padding: {
                 top: 5,
@@ -21,22 +30,20 @@ class Credits extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        
+
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2, 'Frosty Frenzy', menuConfig).setOrigin(1.25);
-        this.add.text(game.config.width/2 + 100, game.config.height/2, 'Credits', menuConfig).setOrigin(1.25);
+        this.add.text((game.config.width * 12) / 16, ((game.config.height * 7) / 8) - (game.config.height / 32), 'Menu', menuConfig);
 
         // define keys
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-   
-        }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            this.scene.start("playScene");
+            this.scene.start("menuScene");
         }
+
+        // update the tile background
+        this.snowForest.tilePositionX += 4;
       }
 }

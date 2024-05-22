@@ -10,7 +10,6 @@ class NextWave extends Phaser.Scene {
     create() {
         wave++;
         score++;
-        console.log(wave);
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',

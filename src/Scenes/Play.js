@@ -16,6 +16,9 @@ class Play extends Phaser.Scene {
 
         // background
         this.load.image("snowForest", "./assets/snowForest.png");
+
+        // tiny ski spritesheet
+        this.load.spritesheet('tinyski', './assets/tilemap_packed.png', { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 132});
     }
 
     create() {
@@ -39,8 +42,8 @@ class Play extends Phaser.Scene {
         this.add.text(game.config.width/2 + 100, game.config.height/2, 'Play', menuConfig).setOrigin(1.25);
 
         // define keys
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -52,28 +55,7 @@ class Play extends Phaser.Scene {
         this.snowman = this.physics.add.sprite(game.config.width / 8, game.config.height / 2, 'snowman').setScale(4);
         this.snowman.setCollideWorldBounds(true);
 
-        // add yeti enemy in a random position
-        /*this.yeti = this.physics.add.group();
-        this.yeti.enableBody = true;
-        this.yeti.physicsBodyType = Phaser.Physics.ARCADE;
-
-        for (let i = 0; i <= 2; i++) {
-            this.randomRowPosition = Math.floor(Phaser.Math.Between(1, 7));
-            this.randomColumnPosition = Math.floor(Phaser.Math.Between(5, 7));
-            this.randomYeti = Phaser.Math.Between(1, 3);
-
-            // random yeti pose
-            if (this.randomYeti == 1) {
-                this.randomYeti = 'yeti1';
-            } else if (this.randomYeti == 2) {
-                this.randomYeti = 'yeti2';
-            } else {
-                this.randomYeti = 'yeti3';
-            }
-
-            this.yeti.create((game.config.width * this.randomColumnPosition) / 8, (game.config.height * this.randomRowPosition) / 8, this.randomYeti).setScale(4);
-        }*/
-
+        // add yeti enemies in a random position
         this.randomRowPosition1 = Math.floor(Phaser.Math.Between(1, 7));
         this.randomRowPosition2 = Math.floor(Phaser.Math.Between(1, 7));
         this.randomRowPosition3 = Math.floor(Phaser.Math.Between(1, 7));
@@ -124,10 +106,6 @@ class Play extends Phaser.Scene {
         this.moveDirection3 = 1;
 
         // add balls
-        /*this.blueBall = this.physics.add.group();
-        this.blueBall.enableBody = true;
-        this.blueBall.physicsBodyType = Phaser.Physics.ARCADE;*/
-
         this.blueBall = this.physics.add.sprite(this.snowman.x, this.snowman.y, 'blue_ball').setScale(0.25);
         this.blueBall.visible = false;
 
@@ -144,7 +122,7 @@ class Play extends Phaser.Scene {
             loop: true
           });
 
-        // Add collision detection between snowman and red ball
+        // collision detection between snowman and red ball
         this.physics.add.collider(this.snowman, this.redBall, () => {
             this.snowman.destroy();
             gameover = true;
@@ -228,29 +206,21 @@ class Play extends Phaser.Scene {
             this.blueBall.x = this.snowman.x;
         }
 
-        if (keyW.isDown) {
+        if (keyW.isDown || keyUP.isDown) {
             if (this.snowman.y < game.config.height) {
                 this.snowman.y -= moveSpeed;
             }
         }
-        if (keyS.isDown) {
+        if (keyS.isDown || keyDOWN.isDown) {
             if (this.snowman.y > 0) {
                 this.snowman.y += moveSpeed;
             }
         }
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            /*this.blueBall.create(this.snowman.x, this.snowman.y, 'blue_ball').setScale(0.25);
-            this.blueBall.setVelocityX(ballSpeed);*/
             this.blueBall.x = this.snowman.x;
             this.blueBall.y = this.snowman.y;
             this.blueBall.visible = true;
             this.firstShot = true;
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-   
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            this.scene.start("gameoverScene");
         }
 
         // update the tile background
