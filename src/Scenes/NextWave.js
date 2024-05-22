@@ -1,17 +1,16 @@
-class Menu extends Phaser.Scene {
+class NextWave extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("nextwaveScene");
     }
 
     preload() {
-        // background
-        this.load.image("snowForest", "./assets/snowForest.png");
+
     }
 
     create() {
-        // create the tile backgrounds
-        this.snowForest = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'snowForest').setOrigin(0, 0);
-        
+        wave++;
+        score++;
+        console.log(wave);
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',
@@ -25,10 +24,10 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-
+        
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2, 'Frosty Frenzy', menuConfig).setOrigin(1.25);
-        this.add.text(game.config.width/2 + 100, game.config.height/2, 'Menu', menuConfig).setOrigin(1.25);
+        this.add.text(game.config.width/2 + 100, game.config.height/2, 'Next Wave', menuConfig).setOrigin(1.25);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -40,10 +39,7 @@ class Menu extends Phaser.Scene {
    
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            this.scene.start("controlsScene");
+            this.scene.start("playScene");
         }
-
-        // update the tile background
-        this.snowForest.tilePositionX += 4;
       }
 }

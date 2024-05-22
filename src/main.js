@@ -11,6 +11,7 @@
 // All assets from Kenny Assets:
 // Tiny Ski: https://kenney.nl/assets/tiny-ski
 // Rolling Ball Assets: https://kenney.nl/assets/rolling-ball-assets
+// Cursor Pack: https://kenney.nl/assets/cursor-pack
 // Impact Sounds: https://kenney.nl/assets/impact-sounds
 // UI Audio: https://kenney.nl/assets/ui-audio
 // Music Jingles: https://kenney.nl/assets/music-jingles 
@@ -26,15 +27,25 @@ let config = {
     render: {
         pixelArt: true  // prevent pixel art from getting blurred when scaled
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+          debug: false
+        }
+      },
     width: 960,
     height: 640,
-    scene: [Menu, Controls, Credits, Play, Gameover]
+    scene: [Menu, Controls, Credits, Play, NextWave, Gameover]
 }
 
 // Global variable to hold sprites
 var my = {sprite: {}};
 let score = 0;
+let moveSpeed = 10;
+let ballSpeed = 500;
+let gameover = false;
+let wave = 1;
 
 const game = new Phaser.Game(config);
 
-let keyLEFT, keyRIGHT;
+let keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keySPACE;
