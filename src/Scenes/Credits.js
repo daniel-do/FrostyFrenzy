@@ -8,7 +8,7 @@ class Credits extends Phaser.Scene {
         this.load.image("right_arrow", "./assets/right_arrow.png");
 
         // background
-        this.load.image("snowForest", "./assets/snowForest.png");
+        this.load.image("snowForest", "./assets/backgrounds/snowForest.png");
     }
 
     create() {
@@ -36,10 +36,11 @@ class Credits extends Phaser.Scene {
 
         // define keys
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+        if (Phaser.Input.Keyboard.JustDown(keyRIGHT) || Phaser.Input.Keyboard.JustDown(keyD)) {
             this.scene.start("menuScene");
         }
 

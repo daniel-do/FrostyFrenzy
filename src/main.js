@@ -10,6 +10,7 @@
 // 
 // All assets from Kenny Assets:
 // Tiny Ski: https://kenney.nl/assets/tiny-ski
+// Tiny Dungeon: https://kenney.nl/assets/tiny-dungeon
 // Rolling Ball Assets: https://kenney.nl/assets/rolling-ball-assets
 // Cursor Pack: https://kenney.nl/assets/cursor-pack
 // Impact Sounds: https://kenney.nl/assets/impact-sounds
@@ -45,7 +46,8 @@ let moveSpeed = 10;
 let ballSpeed = 500;
 let gameover = false;
 let wave = 1;
+let shootDelay = 3000;
 
 const game = new Phaser.Game(config);
 
-let keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keySPACE;
+let keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keySPACE;

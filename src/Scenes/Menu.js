@@ -22,7 +22,7 @@ class Menu extends Phaser.Scene {
         this.load.image("keyboard_space", "./assets/keyboard_space.png");
 
         // background
-        this.load.image("snowForest", "./assets/snowForest.png");
+        this.load.image("snowForest", "./assets/backgrounds/snowForest.png");
     }
 
     create() {
@@ -72,6 +72,8 @@ class Menu extends Phaser.Scene {
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
@@ -90,10 +92,10 @@ class Menu extends Phaser.Scene {
         this.letterZ2.y = game.config.height / 4 + 80 + (Math.sin(this.game.loop.frame * 0.04) * 20);
         this.letterY2.y = game.config.height / 4 + 80 + (Math.sin(this.game.loop.frame * 0.04) * 20);
 
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (Phaser.Input.Keyboard.JustDown(keyLEFT) || Phaser.Input.Keyboard.JustDown(keyA)) {
             this.scene.start("creditsScene");
         }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+        if (Phaser.Input.Keyboard.JustDown(keyRIGHT) || Phaser.Input.Keyboard.JustDown(keyD)) {
             this.scene.start("controlsScene");
         }
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
