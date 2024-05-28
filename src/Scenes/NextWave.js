@@ -45,7 +45,7 @@ class NextWave extends Phaser.Scene {
             this.leftArrow = this.add.image(game.config.width / 16, (game.config.height * 7) / 8, 'left_arrow').setScale(2);
 
             menuConfig.color = '#32CD32';
-            this.add.text(game.config.width / 8, (game.config.height / 2) - (game.config.height / 16), 'Cleared Wave ' + (wave - 1) + '!', menuConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, (game.config.height / 2) - (game.config.height / 16), 'Cleared Wave ' + (wave - 1) + '!', menuConfig).setOrigin(0.5);
             menuConfig.color = 'black';
             this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Score: ' + score, menuConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Final Wave', menuConfig).setOrigin(0.5);
