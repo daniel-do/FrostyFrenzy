@@ -36,7 +36,7 @@ let config = {
       },
     width: 960,
     height: 640,
-    scene: [Menu, Controls, Credits, Play, NextWave, Gameover]
+    scene: [Boot, Menu, Controls, Credits, Play, NextWave, Gameover]
 }
 
 // Global variable to hold sprites
@@ -47,6 +47,7 @@ let ballSpeed = 500;
 let gameover = false;
 let wave = 1;
 let shootDelay = 3000;
+let lives = 3;
 
 const game = new Phaser.Game(config);
 

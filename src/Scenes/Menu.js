@@ -23,6 +23,9 @@ class Menu extends Phaser.Scene {
 
         // background
         this.load.image("snowForest", "./assets/backgrounds/snowForest.png");
+
+        // sfx
+        this.load.audio("click", "./assets/audio/switch_001.mp3");
     }
 
     create() {
@@ -67,7 +70,12 @@ class Menu extends Phaser.Scene {
         // show menu text
         this.add.text((game.config.width * 2) / 16, ((game.config.height * 7) / 8) - (game.config.height / 32), 'Credits', menuConfig);
         this.add.text((game.config.width * 12) / 16, ((game.config.height * 7) / 8) - (game.config.height / 32), 'Controls', menuConfig);
-        this.add.text(game.config.width / 2 - 32, ((game.config.height * 5.75) / 8) - (game.config.height / 32), 'Play', menuConfig);
+        this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Shoot and dodge the monsters!', menuConfig).setOrigin(0.5);
+        if (wave <= 1) {
+            this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Play', menuConfig).setOrigin(0.5);
+        } else {
+            this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Resume (Wave ' + wave + ')', menuConfig).setOrigin(0.5);
+        }
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -75,6 +83,9 @@ class Menu extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // sfx
+        this.click = this.sound.add("click", {volume: 1});
     }
 
     update() {
@@ -94,12 +105,15 @@ class Menu extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyLEFT) || Phaser.Input.Keyboard.JustDown(keyA)) {
             this.scene.start("creditsScene");
+            this.click.play();
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT) || Phaser.Input.Keyboard.JustDown(keyD)) {
             this.scene.start("controlsScene");
+            this.click.play();
         }
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start("playScene");
+            this.click.play();
         }
 
         // update the tile background

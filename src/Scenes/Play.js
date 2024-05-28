@@ -27,6 +27,15 @@ class Play extends Phaser.Scene {
 
         // tiny ski spritesheet
         this.load.spritesheet('tinyski', './assets/tilemap_packed.png', { frameWidth: 16, frameHeight: 16, startFrame: 0, endFrame: 132});
+
+        // sfx
+        this.load.audio("ascend", "./assets/audio/ascend.mp3");
+        this.load.audio("descend", "./assets/audio/descend.mp3");
+        this.load.audio("hit0", "./assets/audio/footstep_snow_000.mp3");
+        this.load.audio("hit1", "./assets/audio/footstep_snow_001.mp3");
+        this.load.audio("hit2", "./assets/audio/footstep_snow_002.mp3");
+        this.load.audio("hit3", "./assets/audio/footstep_snow_003.mp3");
+        this.load.audio("hit4", "./assets/audio/footstep_snow_004.mp3");
     }
 
     create() {
@@ -34,9 +43,8 @@ class Play extends Phaser.Scene {
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',
-            fontSize: '28px',
-            backgroundColor: '#A020F0',
-            color: '#FFFFFF',
+            fontSize: '32px',
+            color: 'black',
             align: 'right',
             padding: {
                 top: 5,
@@ -44,10 +52,6 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        
-        // show menu text
-        this.add.text(game.config.width/2, game.config.height/2, 'Frosty Frenzy', menuConfig).setOrigin(1.25);
-        this.add.text(game.config.width/2 + 100, game.config.height/2, 'Play', menuConfig).setOrigin(1.25);
 
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -68,6 +72,29 @@ class Play extends Phaser.Scene {
             this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'desert').setOrigin(0, 0);
             this.enemyType = 'spider';
         }
+
+        if (wave == 1) {
+            this.enemiesLeft = 1;
+        } else if (wave == 2) {
+            this.enemiesLeft = 2;
+        } else if (wave <= 9) {
+            this.enemiesLeft = 3;
+        } else {
+            this.enemiesLeft = 4;
+        }
+
+        // show menu text
+        this.scoreText = this.add.text(game.config.width / 16, game.config.height / 16, 'Score: ' + score, menuConfig);
+        this.add.text(game.config.width / 16, (game.config.height * 2) / 16, 'Wave: ' + wave, menuConfig);
+
+        // show lives
+        this.health1 = this.physics.add.sprite(game.config.width / 16, (game.config.height * 4) / 16, 'snowman').setScale(2);
+        this.health2 = this.physics.add.sprite((game.config.width * 2) / 16, (game.config.height * 4) / 16, 'snowman').setScale(2);
+        this.health3 = this.physics.add.sprite((game.config.width * 3) / 16, (game.config.height * 4) / 16, 'snowman').setScale(2);
+
+        this.health1.visible = true;
+        this.health2.visible = true;
+        this.health3.visible = true;
 
         // add snowman player
         this.snowman = this.physics.add.sprite(game.config.width / 8, game.config.height / 2, 'snowman').setScale(4);
@@ -165,33 +192,41 @@ class Play extends Phaser.Scene {
 
         // collision detection between snowman and red ball
         this.physics.add.collider(this.snowman, this.redBall, () => {
-            this.snowman.destroy();
-            gameover = true;
+            lives--;
+            this.randomSound();
+            this.redBall.clear(true, false);
         });
+
+        // sfx
+        this.ascend = this.sound.add("ascend", {volume: 1});
+        this.descend = this.sound.add("descend", {volume: 1});
+        this.hit0 = this.sound.add("hit0", {volume: 1});
+        this.hit1 = this.sound.add("hit1", {volume: 1});
+        this.hit2 = this.sound.add("hit2", {volume: 1});
+        this.hit3 = this.sound.add("hit3", {volume: 1});
+        this.hit4 = this.sound.add("hit4", {volume: 1});
     }
 
     update() {
-        if (score == 1) {
+        this.snowman.x = game.config.width / 8;
+        this.scoreText.setText('Score: ' + score);
+
+        if (this.enemiesLeft <= 0) {
             this.scene.start('nextwaveScene');
-        } else if (score == 4) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 8) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 12) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 16) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 20) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 24) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 28) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 32) {
-            this.scene.start('nextwaveScene');
-        } else if (score == 37) {
-            this.scene.start('nextwaveScene');
+            this.ascend.play();
         }
+
+        if (lives <= 2) {
+            this.health1.visible = false;
+        }
+        if (lives <= 1) {
+            this.health2.visible = false;
+        }
+        if (lives <= 0) {
+            this.health3.visible = false;
+            gameover = true;
+        }
+
         // yeti enemies moving up and down the screen
         if ((wave >= 1) && (wave < 4)) {
             if (this.yeti1.y < game.config.height - 30) { // yeti1
@@ -211,6 +246,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
         }
         if ((wave >= 2) && (wave < 4)) {
@@ -230,6 +267,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
         }
         if ((wave >= 3) && (wave < 4)) {
@@ -249,6 +288,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
         }
         if (wave > 3) {
@@ -268,6 +309,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
 
             if (this.monster2.y < game.config.height - 30) { // monster2
@@ -286,6 +329,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
 
             if (this.monster3.y < game.config.height - 30) { // monster3
@@ -304,6 +349,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
         }
         if (wave >= 10) {
@@ -323,6 +370,8 @@ class Play extends Phaser.Scene {
                 this.blueBall.visible = false;
                 this.blueBall.x = this.snowman.x;
                 score++;
+                this.enemiesLeft--;
+                this.randomSound();
             }
         }
 
@@ -358,6 +407,7 @@ class Play extends Phaser.Scene {
         // game over logic
         if (gameover) {
             this.scene.start("gameoverScene");
+            this.descend.play();
         }
     }
 
@@ -388,5 +438,20 @@ class Play extends Phaser.Scene {
         }
         this.redBall.setVelocityX(-ballSpeed); // shoot left direction
         this.bossBall.setVelocityX(-ballSpeed); // shoot left direction
+    }
+
+    randomSound() {
+        this.snowSound = Math.floor(Phaser.Math.Between(0, 4));
+        if (this.snowSound == 0) {
+            this.hit0.play();
+        } else if (this.snowSound == 1) {
+            this.hit1.play();
+        } else if (this.snowSound == 2) {
+            this.hit2.play();
+        } else if (this.snowSound == 3) {
+            this.hit3.play();
+        } else {
+            this.hit4.play();
+        }
     }
 }

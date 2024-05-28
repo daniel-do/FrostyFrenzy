@@ -4,39 +4,47 @@ class Gameover extends Phaser.Scene {
     }
 
     preload() {
-
+        // background
+        this.load.image("castles", "./assets/backgrounds/castles.png");
     }
 
     create() {
+        // create the tile backgrounds
+        this.background = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'castles').setOrigin(0, 0);
+
+        this.keyboardSpace = this.add.image(game.config.width / 2, (game.config.height * 7) / 8, 'keyboard_space').setScale(2);
+
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',
-            fontSize: '28px',
-            backgroundColor: '#A020F0',
-            color: '#FFFFFF',
-            align: 'right',
+            fontSize: '64px',
+            color: 'red',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 0
         }
-        
+
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2, 'Frosty Frenzy', menuConfig).setOrigin(1.25);
-        this.add.text(game.config.width/2 + 100, game.config.height/2, 'Gameover', menuConfig).setOrigin(1.25);
+        this.add.text(game.config.width / 2, game.config.height / 4, 'GAME OVER', menuConfig).setOrigin(0.5);
+        menuConfig.color = 'black';
+        menuConfig.fontSize = '32px';
+        this.add.text(game.config.width / 2, game.config.height / 2, 'Score: ' + score, menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Main Menu', menuConfig).setOrigin(0.5);
 
         // define keys
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-   
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            this.scene.start("menuScene");
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            score = 0;
+            wave = 1;
+            shootDelay = 3000;
+            lives = 3;
+            this.scene.start("menuScene")
         }
       }
 }

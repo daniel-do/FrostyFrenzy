@@ -10,7 +10,6 @@ class NextWave extends Phaser.Scene {
 
     create() {
         wave++;
-        score++;
         shootDelay -= 250;
 
         // create the tile backgrounds
@@ -23,7 +22,7 @@ class NextWave extends Phaser.Scene {
             fontFamily: 'Arial',
             fontSize: '32px',
             color: 'black',
-            align: 'right',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
@@ -37,17 +36,26 @@ class NextWave extends Phaser.Scene {
             this.leftArrow = this.add.image(game.config.width / 16, (game.config.height * 7) / 8, 'left_arrow').setScale(2);
 
             this.add.text((game.config.width * 2) / 16, ((game.config.height * 7) / 8) - (game.config.height / 32), 'Menu', menuConfig);
-            this.add.text((game.config.width * 3)/ 8, (game.config.height / 2) - (game.config.height / 32), 'Cleared Wave ' + (wave - 1) + '!', menuConfig);
-            this.add.text((game.config.width * 3.25)/ 8, ((game.config.height * 5.75) / 8) - (game.config.height / 32), 'Next Wave', menuConfig);
+            menuConfig.color = '#32CD32';
+            this.add.text(game.config.width / 2, (game.config.height / 2) - (game.config.height / 16), 'Cleared Wave ' + (wave - 1) + '!', menuConfig).setOrigin(0.5);
+            menuConfig.color = 'black';
+            this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Score: ' + score, menuConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Next Wave', menuConfig).setOrigin(0.5);
         } else if (wave == 10) {
             this.leftArrow = this.add.image(game.config.width / 16, (game.config.height * 7) / 8, 'left_arrow').setScale(2);
 
-            this.add.text((game.config.width * 3)/ 8, (game.config.height / 2) - (game.config.height / 32), 'Cleared Wave ' + (wave - 1) + '!', menuConfig);
-            this.add.text((game.config.width * 3.25)/ 8, ((game.config.height * 5.75) / 8) - (game.config.height / 32), 'Final Wave', menuConfig);
+            menuConfig.color = '#32CD32';
+            this.add.text(game.config.width / 8, (game.config.height / 2) - (game.config.height / 16), 'Cleared Wave ' + (wave - 1) + '!', menuConfig).setOrigin(0.5);
+            menuConfig.color = 'black';
+            this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Score: ' + score, menuConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Final Wave', menuConfig).setOrigin(0.5);
         }
         if (wave > 10) {
-            this.add.text((game.config.width * 2)/ 8, (game.config.height / 2) - (game.config.height / 32), 'You have cleared all waves, congrats!', menuConfig);
-            this.add.text((game.config.width * 3.25)/ 8, ((game.config.height * 5.75) / 8) - (game.config.height / 32), 'Main Menu', menuConfig);
+            menuConfig.color = '#32CD32';
+            this.add.text(game.config.width / 2, (game.config.height / 2) - (game.config.height / 16), 'You have cleared all waves, congrats!', menuConfig).setOrigin(0.5);
+            menuConfig.color = 'black';
+            this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Score: ' + score, menuConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, ((game.config.height * 6) / 8) - (game.config.height / 32), 'Main Menu', menuConfig).setOrigin(0.5);
         }
 
         // define keys
@@ -68,6 +76,7 @@ class NextWave extends Phaser.Scene {
                 score = 0;
                 wave = 1;
                 shootDelay = 3000;
+                lives = 3;
                 this.scene.start("menuScene")
             }
         }

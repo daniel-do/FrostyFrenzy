@@ -21,9 +21,9 @@ class Credits extends Phaser.Scene {
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Arial',
-            fontSize: '32px',
-            color: 'black',
-            align: 'right',
+            fontSize: '64px',
+            color: 'green',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
@@ -32,16 +32,27 @@ class Credits extends Phaser.Scene {
         }
 
         // show menu text
+        this.creditsTitle = this.add.text(game.config.width / 2, game.config.height / 8, 'CREDITS', menuConfig).setOrigin(0.5);
+        menuConfig.color = 'black';
+        menuConfig.fontSize = '32px';
+        this.add.text(game.config.width / 2, (game.config.height * 3) / 8, 'Development, Design - Daniel Do', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height * 4) / 8, 'Art, Sound Effects - Kenney (https://kenney.nl/)', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height * 5) / 8, 'Music - "Snowball Fight" by Hyper Potions', menuConfig).setOrigin(0.5);
         this.add.text((game.config.width * 12) / 16, ((game.config.height * 7) / 8) - (game.config.height / 32), 'Menu', menuConfig);
 
         // define keys
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        // sfx
+        this.click = this.sound.add("click", {volume: 1});
     }
 
     update() {
+        this.creditsTitle.y = game.config.height / 4 + (Math.sin(this.game.loop.frame * 0.04) * 20);
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT) || Phaser.Input.Keyboard.JustDown(keyD)) {
             this.scene.start("menuScene");
+            this.click.play();
         }
 
         // update the tile background
